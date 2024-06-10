@@ -25,6 +25,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Change to backend directory
+        run: cd path/to/your/backend/directory
+
       - name: Install dependencies
         run: npm install
 
@@ -42,3 +45,4 @@ jobs:
           fields: repo,message,commit,author,action,eventName,ref,workflow,branch
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
