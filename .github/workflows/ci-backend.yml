@@ -21,12 +21,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd ~/projects/wow-guild-deity-backend
+          cd $GITHUB_WORKSPACE
           npm install
 
       - name: Run tests
         run: |
-          cd ~/projects/wow-guild-deity-backend
+          cd $GITHUB_WORKSPACE
           npm test
 
   notifications:
