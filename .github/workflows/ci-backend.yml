@@ -1,4 +1,4 @@
-name: Backend CI
+name: Backend CI/CD
 
 on:
   push:
@@ -11,33 +11,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
 
-      - name: Install dependencies
-        run: |
-          cd $GITHUB_WORKSPACE
-          npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Run tests
-        run: |
-          cd $GITHUB_WORKSPACE
-          npm test
+    - name: Run tests
+      run: npm test
+
+    - name: Build Docker image
+      run: docker build -t wow-guild-deity-backend .
+
+    - name: Push Docker image
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker tag wow-guild-deity-backend ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
+
+    - name: Deploy with Docker Compose
+      run: |
+        docker-compose down
+        docker-compose up -d
 
   notifications:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Notify Slack
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,branch
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,branch
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
