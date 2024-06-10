@@ -23,8 +23,8 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v3
       with:
-        distribution: 'adopt'  # Specify the distribution (e.g., 'adopt', 'zulu', 'temurin')
-        java-version: '11'     # Specify the version (adjust as needed)
+        distribution: 'temurin'  # Using 'temurin' as an example, adjust as needed
+        java-version: '11'       # Specify the Java version
 
     - name: Install dependencies
       run: npm install
