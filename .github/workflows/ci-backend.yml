@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +35,17 @@ jobs:
         docker tag wow-guild-deity-backend ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
 
+    - name: Deploy to Server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+        docker pull ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
+        docker stop backend-container || true
+        docker rm backend-container || true
+        docker run -d --name backend-container -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
+        EOF
+
   notifications:
+
     needs: build
     runs-on: ubuntu-latest
 
