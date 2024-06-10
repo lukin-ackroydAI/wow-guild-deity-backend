@@ -21,11 +21,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./projects/wow-guild-deity-backend
+        working-directory: ~/projects/wow-guild-deity-backend
 
       - name: Run tests
         run: npm test
-        working-directory: ./projects/wow-guild-deity-backend
+        working-directory: ~/projects/wow-guild-deity-backend
 
   notifications:
     needs: build
