@@ -18,3 +18,14 @@ jobs:
           java-version: '11'
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Send Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        with:
+          args: |
+            status=${{ job.status }}
+            author_name=GitHub Actions
+            title="Backend CI Workflow ${{ job.status }}"
+            message="The Backend CI workflow has ${{ job.status }}."
