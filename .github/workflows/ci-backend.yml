@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Set up Node.js
@@ -19,19 +19,19 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Change to backend directory
-      run: cd ./projects/wow-guild-deity-backend
-
     - name: Install dependencies
-      run: npm install
+      run: |
+        cd ~/projects/wow-guild-deity-backend
+        npm install
 
     - name: Run tests
-      run: npm test
+      run: |
+        cd ~/projects/wow-guild-deity-backend
+        npm test
 
   notifications:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
     - name: Notify Slack
       uses: 8398a7/action-slack@v3
