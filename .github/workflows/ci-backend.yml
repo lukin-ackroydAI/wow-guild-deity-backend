@@ -20,7 +20,7 @@ jobs:
           node-version: '20'
 
       - name: Change to backend directory
-        run: cd ~/projects/wow-guild-deity-backend/.github/workflows/ci-backend.yml
+        run: cd ~/projects/wow-guild-deity-backend
 
       - name: Install dependencies
         run: npm install
