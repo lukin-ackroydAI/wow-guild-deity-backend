@@ -24,12 +24,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        working-directory: ./projects/wow-guild-deity-backend
         run: npm install
+        working-directory: ./projects/wow-guild-deity-backend
 
       - name: Run tests
-        working-directory: ./projects/wow-guild-deity-backend
         run: npm test
+        working-directory: ./projects/wow-guild-deity-backend
 
   notifications:
     needs: build
