@@ -1,31 +1,49 @@
-name: Backend CI
+name: Backend CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: Send Slack Notification
-        if: always()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        with:
-          args: |
-            status=${{ job.status }}
-            author_name=GitHub Actions
-            title="Backend CI Workflow ${{ job.status }}"
-            message="The Backend CI workflow has ${{ job.status }}."
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'  # Specify the distribution (e.g., 'adopt', 'zulu', 'temurin')
+        java-version: '11'     # Specify the version (adjust as needed)
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Build project
+      run: npm run build
+
+  notifications:
+    slack:
+      if: failure()
+      runs-on: ubuntu-latest
+      steps:
+        - name: Notify Slack
+          uses: 8398a7/action-slack@v3
+          with:
+            status: ${{ job.status }}
+            fields: repo,message,commit,author,ref,workflow,job,took
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
