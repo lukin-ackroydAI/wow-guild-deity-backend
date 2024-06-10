@@ -20,14 +20,12 @@ jobs:
           node-version: '20'
 
       - name: Change to backend directory
-        run: cd projects/wow-guild-deity-backend
+        run: ${{ github.workspace }}/projects/wow-guild-deity-backend
 
       - name: Install dependencies
-        working-directory: projects/wow-guild-deity-backend
         run: npm install
 
       - name: Run tests
-        working-directory: projects/wow-guild-deity-backend
         run: npm test
 
   notifications:
