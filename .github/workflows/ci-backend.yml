@@ -20,7 +20,7 @@ jobs:
         node-version: '20'
 
     - name: Change to backend directory
-      run: cd ~/projects/wow-guild-deity-backend
+      run: cd ./projects/wow-guild-deity-backend
 
     - name: Install dependencies
       run: npm install
@@ -31,6 +31,7 @@ jobs:
   notifications:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
     - name: Notify Slack
       uses: 8398a7/action-slack@v3
