@@ -34,11 +34,6 @@ jobs:
         docker tag wow-guild-deity-backend ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/wow-guild-deity-backend:latest
 
-    - name: Deploy with Docker Compose
-      run: |
-        docker-compose down
-        docker-compose up -d
-
   notifications:
     needs: build
     runs-on: ubuntu-latest
